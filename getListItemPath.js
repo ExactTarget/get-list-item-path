@@ -1,5 +1,31 @@
-define( function( require ) {
-	var $ = require('jquery');
+/*
+ * Fuel UX Checkbox
+ * https://github.com/ExactTarget/fuelux
+ *
+ * Copyright (c) 2014 ExactTarget
+ * Licensed under the BSD New license.
+ */
+
+// -- BEGIN UMD WRAPPER PREFACE --
+
+// For more information on UMD visit:
+// https://github.com/umdjs/umd/blob/master/jqueryPlugin.js
+
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// if AMD loader is available, register as an anonymous module.
+		define(['jquery'], factory);
+	} else if (typeof exports === 'object') {
+		// Node/CommonJS
+		module.exports = factory(require('jquery'));
+	} else {
+		// OR use browser globals if AMD is not present
+		factory(jQuery);
+	}
+}(function ($) {
+	// -- END UMD WRAPPER PREFACE --
+
+	// -- BEGIN MODULE CODE HERE --
 
 	var getListItemPath = function getListItemPath(list, selectedItem, labelSelector, joinBy) {
 		var labels;
@@ -40,9 +66,10 @@ define( function( require ) {
 	};
 
 	return getListItemPath;
-});
 
-
+	// -- BEGIN UMD WRAPPER AFTERWORD --
+}));
+// -- END UMD WRAPPER AFTERWORD --
 
 /*
 		// get string value representation ("/trunk/branch/branch, /trunk, /trunk/branch/branch/branch/leaf")
