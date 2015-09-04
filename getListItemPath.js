@@ -1,53 +1,65 @@
+function getListItemPath(list, selectedItem, labelSelector, joinBy) {
+	var labels;
+	var $selectedItem = $(selectedItem);
+	var $items = $selectedItem.add($selectedItem.parentsUntil($(list), 'li'));
 
-getListItemPath: function getListItemPath($selectedItem, $list, labelSelector) {
-	var $objects = $selectedItem.add($selectedItem.parentsUntil($tree, 'li'));
-	var arr;
-	if(labelSelector){
-		arr = $objects.map(function () { return $(this).children().filter(':not(ul)').find(labelSelector).text() });
-	}else{
-		arr = $objects.map(function () { return $(this).children().first().text().trim() });
-	}
+	labels = $items.map(function findLabel() {
+		var $children = $(this).children();
+		var text;
 
-	arr = Array.prototype.slice.call(arr);
+		if (labelSelector) {
+			text = $children.filter(':not(ul)').find(labelSelector).text();
+		} else {
+			text = $children.first().text();
+		}
 
-	return arr;
-};
-
-var $selected = $('.tree-selected').first();
-var $tree = $('#treeIllustration');
-console.log(getListItemPath($selected, $tree, '.tree-label').join('/'));
-console.log(getListItemPath($selected, $tree).join('>'));
-
-
-getListItemPath: function getListItemPath($selectedItems, $list, returnMultiple, labelSelector) {
-	var $selectionPaths = [];
-	$selectedItems.each(function(){
-		$selectionPaths.push($(this).add($(this).parentsUntil($tree, 'li')));
+		return text.trim();
 	});
 
-	var arr=[];
-	if(labelSelector){
-		$.each($selectionPaths, function (i, $selectionPath) {
-			var selectionPath = $selectionPath.map(function () { return $(this).children().filter(':not(ul)').find(labelSelector).text() });
-			arr.push(Array.prototype.slice.call(selectionPath));
-		});
-	}else{
-		$.each($selectionPaths, function (i, $selectionPath) {
-			var selectionPath = $selectionPath.map(function () { return $(this).children().first().text().trim() });
-			arr.push(Array.prototype.slice.call(selectionPath));
-		});
+	labels = Array.prototype.slice.call(labels);
+
+	if(typeof joinBy === "string"){
+		labels = labels.join(joinBy);
 	}
 
-
-	return returnMultiple ? arr : arr[0];
+	return labels;
 };
 
-var $selected = $('.tree-selected');
-var $tree = $('#treeIllustration');
-$.each(getListItemPath($selected, $tree, true, '.tree-label'), function(i, selection){ console.log(selection.join('/')); });
-$.each(getListItemPath($selected, $tree, true), function(i, selection){ console.log(selection.join('>')); });
-console.log(getListItemPath($selected, $tree, false, '.tree-label').join('\\'));
-console.log(getListItemPath($selected, $tree).join('+'));
+function getListItemPaths(list, selectedItems, labelSelector, joinPathBy, joinPathsBy) {
+	var $selectedItems = $(selectedItems);
+	var paths = [];
+	$.each($(selectedItems), function () {
+		paths.push(getListItemPath(list, this, labelSelector, joinPathBy));
+	});
+
+	if(typeof joinPathsBy === "string"){
+		paths = paths.join(joinPathsBy);
+	}
+
+	return paths;
+};
+
+var selected = '.tree-selected';
+console.log('first path', getListItemPath('#treeIllustration', $(selected).first(), '.tree-label').join('/'));
+
+getListItemPaths('#treeIllustration', selected, '.tree-label').forEach(function (path) {
+	console.log('all paths separate', path.join('>'));
+});
+
+var selectedPaths = getListItemPaths('#treeIllustration', selected, '.tree-label');
+var selectedPathsString = $.map(selectedPaths, function(path){
+	return path.join('/');
+}).join(', ');
+console.log('all paths together', selectedPathsString);
+
+console.log('simplified first path', getListItemPath('#treeIllustration', $(selected).first(), '.tree-label', '/'));
+console.log('simplified all paths', getListItemPaths('#treeIllustration', selected, '.tree-label', '/', ', '));
+
+
+
+
+
+
 /*
 		// get string value representation ("/trunk/branch/branch, /trunk, /trunk/branch/branch/branch/leaf")
 		tree.getStringValue: function getStringValue() {
