@@ -1,4 +1,4 @@
-# getListItemPath
+# get-list-item-path
 Takes an item in a series of nested HTML lists and gives you full path to item.
 
 ## Using
@@ -46,7 +46,7 @@ Takes an item in a series of nested HTML lists and gives you full path to item.
     var tree = 'ul';
     var joinPathBy = '/';
     var joinPathsBy = ', ';
-    
+
     var selectedPaths = getListItemPaths(tree, selected);
     var selectedPathsString = $.map(selectedPaths, function(path){
         return path.join(joinPathBy);
