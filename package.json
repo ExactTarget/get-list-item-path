@@ -2,7 +2,7 @@
   "name": "get-list-item-path",
   "version": "1.0.0",
   "description": "Takes an item in a series of nested HTML lists and gives you full path to item(s) selected.",
-  "main": "getListItemPath.js",
+  "main": "getListItemPaths.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

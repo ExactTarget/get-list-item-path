@@ -18,9 +18,20 @@
 		})();
 		require(['tests'], function($){ });
 	</script>
+	<style>
+		body {
+			padding: 20px 50px;
+		}
+
+		li[selected=selected]{
+			background-color: #FFA;
+			border: 1px solid #DD6;
+		}
+	</style>
 </head>
 <body>
 
+<h3>Sample List:</h3>
 <ul>
 	<li><span>One</span>
 		<ul>
@@ -44,6 +55,9 @@
 	<li><span>Four</span></li>
 	<li><span>Five</span></li>
 </ul>
+
+<h3>getListItemPaths output:</h3>
+<div id="paths"></div>
 
 </body>
 </html>
