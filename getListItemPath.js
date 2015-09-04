@@ -1,62 +1,46 @@
-function getListItemPath(list, selectedItem, labelSelector, joinBy) {
-	var labels;
-	var $selectedItem = $(selectedItem);
-	var $items = $selectedItem.add($selectedItem.parentsUntil($(list), 'li'));
+define( function( require ) {
+	var $ = require('jquery');
 
-	labels = $items.map(function findLabel() {
-		var $children = $(this).children();
-		var text;
+	var getListItemPath = function getListItemPath(list, selectedItem, labelSelector, joinBy) {
+		var labels;
+		var $selectedItem = $(selectedItem).first();
+		var $items = $selectedItem.add($selectedItem.parentsUntil($(list).first(), 'li'));
 
-		if (labelSelector) {
-			text = $children.filter(':not(ul)').find(labelSelector).text();
-		} else {
-			text = $children.first().text();
+		labels = $items.map(function findLabel() {
+			var $children = $(this).children();
+			var text;
+
+			if (labelSelector) {
+				text = $children.filter(':not(ul)').find(labelSelector).text();
+			} else {
+				//Assume that the label is not wrapped in anything, but that it may have more nested tree as a sibling
+				//http://stackoverflow.com/questions/3442394/jquery-using-text-to-retrieve-only-text-not-nested-in-child-tags
+				text = $(this).clone()      //clone the element
+								.children() //select all the children
+								.remove()   //remove all the children
+								.end()      //again go back to selected element
+								.text()
+
+				if(text.trim() === ""){
+					//We were wrong. Assume that the very first child contains the label. Otherwise they need to supply a label selector
+					text = $children.first().text()
+				}
+			}
+
+			return text.trim();
+		});
+
+		labels = Array.prototype.slice.call(labels);
+
+		if(typeof joinBy === "string"){
+			labels = labels.join(joinBy);
 		}
 
-		return text.trim();
-	});
+		return labels;
+	};
 
-	labels = Array.prototype.slice.call(labels);
-
-	if(typeof joinBy === "string"){
-		labels = labels.join(joinBy);
-	}
-
-	return labels;
-};
-
-function getListItemPaths(list, selectedItems, labelSelector, joinPathBy, joinPathsBy) {
-	var $selectedItems = $(selectedItems);
-	var paths = [];
-	$.each($(selectedItems), function () {
-		paths.push(getListItemPath(list, this, labelSelector, joinPathBy));
-	});
-
-	if(typeof joinPathsBy === "string"){
-		paths = paths.join(joinPathsBy);
-	}
-
-	return paths;
-};
-
-var selected = '.tree-selected';
-console.log('first path', getListItemPath('#treeIllustration', $(selected).first(), '.tree-label').join('/'));
-
-getListItemPaths('#treeIllustration', selected, '.tree-label').forEach(function (path) {
-	console.log('all paths separate', path.join('>'));
+	return getListItemPath;
 });
-
-var selectedPaths = getListItemPaths('#treeIllustration', selected, '.tree-label');
-var selectedPathsString = $.map(selectedPaths, function(path){
-	return path.join('/');
-}).join(', ');
-console.log('all paths together', selectedPathsString);
-
-console.log('simplified first path', getListItemPath('#treeIllustration', $(selected).first(), '.tree-label', '/'));
-console.log('simplified all paths', getListItemPaths('#treeIllustration', selected, '.tree-label', '/', ', '));
-
-
-
 
 
 
