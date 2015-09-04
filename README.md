@@ -52,3 +52,12 @@ Takes an item in a series of nested HTML lists and gives you full path to item.
         return path.join(joinPathBy);
     }).join(joinPathsBy);
 ```
+
+## Examples in action
+Start the sample app:
+
+`node tests/app.js`
+
+Open up the sample page:
+
+[http://localhost:9001/tests/](http://localhost:9001/tests/)
