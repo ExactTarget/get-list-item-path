@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" class="fuelux">
+<head>
+	<meta charset="utf-8">
+	<title>Fuel UX 3</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<script src="../node_modules/requirejs/require.js"></script>
+	<script type="text/javascript">
+		(function () {
+			requirejs.config({
+				paths: {
+					jquery: '../node_modules/jquery/dist/jquery',
+					getListItemPaths: '../getListItemPaths',
+					getListItemPath: '../getListItemPath'
+				}
+			});
+		})();
+		require(['tests'], function($){ });
+	</script>
+</head>
+<body>
+
+<ul>
+	<li><span>One</span>
+		<ul>
+			<li><span>A</span></li>
+			<li>B
+				<ul>
+					<li><span>I</span></li>
+					<li><span>II</span></li>
+					<li selected="selected"><span>III</span></li>
+					<li><span>IV</span></li>
+					<li><span>V</span></li>
+				</ul>
+			</li>
+			<li><span>C</span></li>
+			<li selected="selected"><span>D</span></li>
+			<li><span>E</span></li>
+		</ul>
+	</li>
+	<li><span>Two</span></li>
+	<li><span>Three</span></li>
+	<li><span>Four</span></li>
+	<li><span>Five</span></li>
+</ul>
+
+</body>
+</html>
